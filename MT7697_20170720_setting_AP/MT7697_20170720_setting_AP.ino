@@ -23,9 +23,15 @@ int flag1=1,flag2=0,flag3=0,flag31=0,flag32=0,flag33=0,flag_lighting1=1,flag_lig
 const char* Topic = "hello/add_data";
 const char* SubTopic = "hello/world";
 
-const char* mqtt_server = "192.168.2.100"; //your cloud server IP, if using localhost, please check CMD ipconfig.
-const char* mqtt_username = "";
-const char* mqtt_password = "";
+// www.tih.tw => Pichu 家的Server
+const char* mqtt_server = "128.199.151.16"; //your cloud server IP, if using localhost, please check CMD ipconfig.
+const char* mqtt_username = "device"; // 
+const char* mqtt_password = "ddddx"; // 
+
+const char* BLE_DATA_TOPIC = "mac_BLE_DATA";
+// mac_BLE_DATA => 共用的
+// mac_xxxxxx => 如果要自己用的話
+// 對應到的event-stream url 就是  https://www.tih.tw:8081/2/device/xxxxxx?event-stream
 
 int i=0;    
 
@@ -143,6 +149,7 @@ void reconnect() {
     String clientId = "M";
     clientId += String(random(0xffff), HEX);
     // Attempt to connect
+    
     if (client.connect(clientId.c_str(),mqtt_username,mqtt_password)) {
       Serial.println("connected");
       // Once connected, publish an announcement...
@@ -269,7 +276,6 @@ for(int i = 0; i < 5; ++i)
   Serial.print(".");
 }
 
-Topic = "hello/update_BLE_data";
 SubTopic = "hello/world";
 
     if (!client.connected()) {
@@ -309,37 +315,22 @@ SubTopic = "hello/world";
  // strcat(buf3,"\\");
   
   Serial.print(buf3);
- // client.publish(Topic, buf3);
+  client.publish(BLE_DATA_TOPIC, buf3);
   Serial.println();
-  
 
 if (flag31 == 1)
 {
   Serial.println("3131");
   analogWrite(pinLed, 55);
-
-
-  
   }
-
   if (flag32 == 1)
   {
     Serial.println("3232");
     analogWrite(pinLed, 0);
-
-
-
-  
     }
-
-
-  
   flag3 = 1;
   digitalWrite(LED_BUILTIN, LOW);   // turn the LED on (HIGH is the voltage level)
   }
-
-  
-
 }
     
 delay(1000 * 1);
